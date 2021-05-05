@@ -1,0 +1,41 @@
+﻿@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h3 id="msgRetorno">Opa! Algo deu errado:</h3>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h3 id="msgRetorno">Opa! Algo deu errado:</h3>
+        <p>@TempData["Error"]</p>
+    </div>
+}
+
+@if (TempData["Errors"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h3 id="msgRetorno">Opa! Algo deu errado:</h3>
+        @{
+            var erros = TempData["Errors"] as string[];
+            foreach (var error in erros)
+            {
+                <p>@error</p>
+            }
+        }
+
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Sucess))
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h3 id="msgRetorno">@ViewBag.Sucess</h3>
+    </div>
+}
