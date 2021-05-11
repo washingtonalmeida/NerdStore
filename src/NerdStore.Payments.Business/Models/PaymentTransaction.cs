@@ -13,5 +13,18 @@ namespace NerdStore.Payments.Business.Models
 
         // EF. Relationship
         public Payment Payment { get; private set; }
+
+        public PaymentTransaction(Guid orderId, Guid paymentId, decimal totalPrice, PaymentTransactionStatus status)
+        {
+            OrderId = orderId;
+            PaymentId = paymentId;
+            TotalPrice = totalPrice;
+            Status = status;
+        }
+
+        public bool IsPaid()
+        {
+            return Status == PaymentTransactionStatus.Paid;
+        }
     }
 }

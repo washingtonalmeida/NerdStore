@@ -15,5 +15,15 @@ namespace NerdStore.Payments.Business.Models
 
         // EF. Relationship
         public PaymentTransaction PaymentTransaction { get; private set; }
+
+        public Payment(Guid orderId, decimal totalPrice, string cardName, string cardNumber, string cardExpirationDate, string cardCvv)
+        {
+            OrderId = orderId;
+            TotalPrice = totalPrice;
+            CardName = cardName;
+            CardNumber = cardNumber;
+            CardExpirationDate = cardExpirationDate;
+            CardCvv = cardCvv;
+        }
     }
 }

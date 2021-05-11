@@ -19,10 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NerdStore.Catalog.Application\NerdStore.Catalog.Application.csproj" />
     <ProjectReference Include="..\NerdStore.Catalog.Application\NerdStore.Catalog.Application\NerdStore.Catalog.Application.csproj" />
     <ProjectReference Include="..\NerdStore.Catalog.Data\NerdStore.Catalog.Data.csproj" />
     <ProjectReference Include="..\NerdStore.Catalog.Domain\NerdStore.Catalog.Domain.csproj" />
     <ProjectReference Include="..\NerdStore.Core\NerdStore.Core.csproj" />
+    <ProjectReference Include="..\NerdStore.Payments.AntiCorruption\NerdStore.Payments.AntiCorruption.csproj" />
+    <ProjectReference Include="..\NerdStore.Payments.Business\NerdStore.Payments.Business.csproj" />
+    <ProjectReference Include="..\NerdStore.Payments.Data\NerdStore.Payments.Data.csproj" />
     <ProjectReference Include="..\NerdStore.Sales.Application\NerdStore.Sales.Application.csproj" />
     <ProjectReference Include="..\NerdStore.Sales.Data\NerdStore.Sales.Data.csproj" />
   </ItemGroup>

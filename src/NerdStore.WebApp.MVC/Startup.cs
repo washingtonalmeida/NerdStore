@@ -12,11 +12,11 @@ using NerdStore.WebApp.MVC.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NerdStore.Catalog.Application.AutoMapper;
 using MediatR;
 using NerdStore.WebApp.MVC.Setup;
 using NerdStore.Catalog.Data;
 using NerdStore.Sales.Data;
+using NerdStore.Catalog.Application.AutoMapper;
 
 namespace NerdStore.WebApp.MVC
 {

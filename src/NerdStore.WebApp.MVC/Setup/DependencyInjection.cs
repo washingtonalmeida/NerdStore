@@ -8,7 +8,15 @@ using NerdStore.Catalog.Domain.Events;
 using NerdStore.Catalog.Domain.Interfaces;
 using NerdStore.Catalog.Domain.Services;
 using NerdStore.Core.Communication.Mediatr;
+using NerdStore.Core.Messages.CommonMessages.IntegrationEvents;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
+using NerdStore.Payments.AntiCorruption.Implementations;
+using NerdStore.Payments.AntiCorruption.Interfaces;
+using NerdStore.Payments.Business.Events;
+using NerdStore.Payments.Business.Implementations;
+using NerdStore.Payments.Business.Interfaces;
+using NerdStore.Payments.Data;
+using NerdStore.Payments.Data.Repository;
 using NerdStore.Sales.Application.Commands.Handlers;
 using NerdStore.Sales.Application.Commands.Models;
 using NerdStore.Sales.Application.Events.Handlers;
@@ -53,6 +61,18 @@ namespace NerdStore.WebApp.MVC.Setup
             services.AddScoped<INotificationHandler<DraftOrderStartedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderUpdatedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderItemAddedEvent>, OrderEventHandler>();
+
+            // Payment
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<PaymentContext>();
+
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<ICreditCardPaymentFacade, CreditCardPaymentFacade>();
+            services.AddScoped<IPayPalGateway, PayPalGateway>();
+            services.AddScoped<IConfigurationManager, ConfigurationManager>();
+            services.AddScoped<IPayPalConfigurationManager, PayPalConfigurationManager>();
+
+            services.AddScoped<INotificationHandler<StockReservedForOrderEvent>, StockReservedForOrderEventHandler>();
         }
     }
 }

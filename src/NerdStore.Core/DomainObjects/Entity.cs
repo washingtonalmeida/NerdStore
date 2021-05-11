@@ -26,6 +26,11 @@ namespace NerdStore.Core.DomainObjects
             _notifications?.Remove(notification);
         }
 
+        public bool HasNotifications()
+        {
+            return Notifications?.Count > 0;
+        }
+
         public void ClearEvents()
         {
             _notifications?.Clear();
