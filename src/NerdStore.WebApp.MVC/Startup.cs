@@ -17,6 +17,7 @@ using NerdStore.WebApp.MVC.Setup;
 using NerdStore.Catalog.Data;
 using NerdStore.Sales.Data;
 using NerdStore.Catalog.Application.AutoMapper;
+using NerdStore.Payments.Data;
 
 namespace NerdStore.WebApp.MVC
 {
@@ -39,7 +40,10 @@ namespace NerdStore.WebApp.MVC
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<SalesContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<PaymentContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();

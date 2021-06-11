@@ -101,9 +101,6 @@ namespace NerdStore.Sales.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<DateTime?>("DateOfUse")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 

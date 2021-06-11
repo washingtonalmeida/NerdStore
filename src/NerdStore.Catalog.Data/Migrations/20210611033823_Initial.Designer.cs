@@ -10,8 +10,8 @@ using NerdStore.Catalog.Data;
 namespace NerdStore.Catalog.Data.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20210309050225_RequiredDimensionsFields")]
-    partial class RequiredDimensionsFields
+    [Migration("20210611033823_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,7 +36,7 @@ namespace NerdStore.Catalog.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("category");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("NerdStore.Catalog.Domain.Models.Product", b =>
@@ -64,7 +64,7 @@ namespace NerdStore.Catalog.Data.Migrations
                         .HasColumnType("varchar(250)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("DECIMAL(10,2)");
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
@@ -76,7 +76,7 @@ namespace NerdStore.Catalog.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("product");
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("NerdStore.Catalog.Domain.Models.Product", b =>
@@ -106,7 +106,7 @@ namespace NerdStore.Catalog.Data.Migrations
 
                             b1.HasKey("ProductId");
 
-                            b1.ToTable("product");
+                            b1.ToTable("Product");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");

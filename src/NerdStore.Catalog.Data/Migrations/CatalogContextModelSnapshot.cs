@@ -62,7 +62,7 @@ namespace NerdStore.Catalog.Data.Migrations
                         .HasColumnType("varchar(250)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("DECIMAL(10,2)");
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");

@@ -2,6 +2,7 @@
 using NerdStore.Core.Communication.Mediatr;
 using NerdStore.Core.Data;
 using NerdStore.Core.Messages;
+using NerdStore.Sales.Domain.Enums;
 using NerdStore.Sales.Domain.Models;
 using System;
 using System.Linq;

@@ -45,8 +45,9 @@ namespace NerdStore.WebApp.MVC.Setup
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<CatalogContext>();
 
-            // Events
-            services.AddScoped<MediatR.INotificationHandler<LowProductStockEvent>, ProductEventHandler>();
+            services.AddScoped<INotificationHandler<LowProductStockEvent>, ProductEventHandler>();
+            services.AddScoped<INotificationHandler<OrderStartedEvent>, ProductEventHandler>();
+            services.AddScoped<INotificationHandler<OrderProcessingCanceledEvent>, ProductEventHandler>();
 
             // Sales
             services.AddScoped<IOrderRepository, OrderRepository>();
@@ -57,10 +58,17 @@ namespace NerdStore.WebApp.MVC.Setup
             services.AddScoped<IRequestHandler<ApplyVoucherToOrderCommand, bool>, ApplyVoucherToOrderCommandHandler>();
             services.AddScoped<IRequestHandler<RemoveOrderItemCommand, bool>, RemoveOrderItemCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateOrderItemCommand, bool>, UpdateOrderItemCommandHandler>();
+            services.AddScoped<IRequestHandler<StartOrderCommand, bool>, StartOrderCommandHandler>();
+            services.AddScoped<IRequestHandler<FinishOrderCommand, bool>, FinishOrderCommandHandler>();
+            services.AddScoped<IRequestHandler<CancelOrderProcessingCommand, bool>, CancelOrderProcessingCommandHandler>();
+            services.AddScoped<IRequestHandler<CancelOrderProcessingAndSupplyStockCommand, bool>, CancelOrderProcessingAndSupplyStockCommandHandler>();
 
             services.AddScoped<INotificationHandler<DraftOrderStartedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderUpdatedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderItemAddedEvent>, OrderEventHandler>();
+            services.AddScoped<INotificationHandler<InsufficientStockForOrderEvent>, InsufficientStockForOrderEventHandler>();
+            services.AddScoped<INotificationHandler<PaidOrderEvent>, PaidOrderEventHandler>();
+            services.AddScoped<INotificationHandler<OrderPaymentDeclinedEvent>, OrderPaymentDeclinedEventHandler>();
 
             // Payment
             services.AddScoped<IPaymentRepository, PaymentRepository>();

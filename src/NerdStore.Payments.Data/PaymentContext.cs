@@ -11,28 +11,12 @@ namespace NerdStore.Payments.Data
     public class PaymentContext : DbContext, IUnitOfWork
     {
         public PaymentContext(DbContextOptions<PaymentContext> options) : base(options)
-        { 
+        {
         }
 
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
-                e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
-                property.SetColumnType("varchar(100)");
-
-            modelBuilder.Ignore<Event>();
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PaymentContext).Assembly);
-
-            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-                relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
-
-            modelBuilder.HasSequence<int>("MySequence").StartsAt(1000).IncrementsBy(1);
-            base.OnModelCreating(modelBuilder);
-        }
 
         public async Task<bool> Commit()
         {
@@ -52,6 +36,21 @@ namespace NerdStore.Payments.Data
             bool isChangesSaved = await base.SaveChangesAsync() > 0;
 
             return isChangesSaved;
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
+                e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
+                property.SetColumnType("varchar(100)");
+
+            modelBuilder.Ignore<Event>();
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PaymentContext).Assembly);
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+                relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -21,7 +21,11 @@ namespace NerdStore.Catalog.Data.Mappings
             builder.Property(c => c.Image)
                 .IsRequired()
                 .HasColumnType("varchar(250)");
-            
+
+            builder.Property(c => c.Price)
+                .IsRequired()
+                .HasColumnType("DECIMAL(10,2)");
+
             builder.OwnsOne(c => c.Dimensions, cm =>
             {
                 cm.Property(c => c.Height)

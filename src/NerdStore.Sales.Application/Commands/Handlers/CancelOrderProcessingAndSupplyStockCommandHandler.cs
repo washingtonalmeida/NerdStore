@@ -6,48 +6,48 @@ using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Sales.Application.Commands.Models;
 using NerdStore.Sales.Domain.Interfaces;
 using NerdStore.Sales.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace NerdStore.Sales.Application.Commands.Handlers
 {
-    public class StartOrderCommandHandler : IRequestHandler<StartOrderCommand, bool>
+    public class CancelOrderProcessingAndSupplyStockCommandHandler : IRequestHandler<CancelOrderProcessingAndSupplyStockCommand, bool>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMediatrHandler _mediatrHandler;
 
-        public StartOrderCommandHandler(IOrderRepository orderRepository, IMediatrHandler mediatrHandler)
+        public CancelOrderProcessingAndSupplyStockCommandHandler(IOrderRepository orderRepository, IMediatrHandler mediatrHandler)
         {
             _orderRepository = orderRepository;
             _mediatrHandler = mediatrHandler;
         }
 
-        public async Task<bool> Handle(StartOrderCommand message, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CancelOrderProcessingAndSupplyStockCommand message, CancellationToken cancellationToken)
         {
             if (!message.IsValid())
             {
-                await PublishCommandErrorsNotifications(message);
+                await PublishInvalidCommandNotifications(message);
                 return false;
             }
 
-            var order = await _orderRepository.GetDraftOrderByCustomerId(message.CustomerId);
+            var order = await GetOrderById(message.OrderId);
             if (order == null)
             {
                 await PublishOrderNotFoundNotification();
                 return false;
             }
 
-            order.StartOrder();
-            order.AddEvent(new OrderStartedEvent(message.CustomerId, message.OrderId, message.TotalPrice, message.CardName, message.CardNumber, 
-                message.CardExpirationDate, message.CardCvv, GetOrderProductsDto(order)));
+            order.DraftOrder();
+            order.AddEvent(new OrderProcessingCanceledEvent(order.CustomerId, order.Id, GetOrderProductsDto(order)));
 
-            PersistOrderStarted(order);
+            PersistOrder(order);
 
             return await CommitChanges();
         }
 
-        private async Task PublishCommandErrorsNotifications(StartOrderCommand message)
+        private async Task PublishInvalidCommandNotifications(CancelOrderProcessingAndSupplyStockCommand message)
         {
             foreach (var error in message.ValidationResult.Errors)
             {
@@ -55,7 +55,12 @@ namespace NerdStore.Sales.Application.Commands.Handlers
             }
         }
 
-        private async Task PublishOrderNotFoundNotification() 
+        private async Task<Order> GetOrderById(Guid orderId)
+        {
+            return await _orderRepository.GetById(orderId);
+        }
+
+        private async Task PublishOrderNotFoundNotification()
         {
             await _mediatrHandler.PublishNotification(new DomainNotification("order", "Order not found!"));
         }
@@ -63,7 +68,6 @@ namespace NerdStore.Sales.Application.Commands.Handlers
         private OrderProductsDto GetOrderProductsDto(Order order)
         {
             var orderProductsDto = new OrderProductsDto();
-            orderProductsDto.OrderId = order.Id;
             orderProductsDto.Products = new List<OrderProductDto>();
             foreach (var item in order.OrderItems)
             {
@@ -73,9 +77,9 @@ namespace NerdStore.Sales.Application.Commands.Handlers
             return orderProductsDto;
         }
 
-        private void PersistOrderStarted(Order orderStarted)
+        private void PersistOrder(Order order)
         {
-            _orderRepository.Update(orderStarted);
+            _orderRepository.Update(order);
         }
 
         private async Task<bool> CommitChanges()

@@ -10,7 +10,7 @@ using NerdStore.Sales.Data;
 namespace NerdStore.Sales.Data.Migrations
 {
     [DbContext(typeof(SalesContext))]
-    [Migration("20210328222636_Initial")]
+    [Migration("20210611034043_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,9 +102,6 @@ namespace NerdStore.Sales.Data.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("DateOfUse")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");

@@ -16,6 +16,7 @@ namespace NerdStore.Sales.Application.Commands.Models
 
         public StartOrderCommand(Guid customerId, Guid orderId, decimal totalPrice, string cardName, string cardNumber, string cardExpirationDate, string cardCvv)
         {
+            AggregateId = orderId;
             CustomerId = customerId;
             OrderId = orderId;
             TotalPrice = totalPrice;

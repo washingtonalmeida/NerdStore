@@ -17,7 +17,7 @@ namespace NerdStore.Catalog.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_category", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -28,7 +28,7 @@ namespace NerdStore.Catalog.Data.Migrations
                     Name = table.Column<string>(type: "varchar(250)", nullable: false),
                     Description = table.Column<string>(type: "varchar(500)", nullable: false),
                     Active = table.Column<bool>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
+                    Price = table.Column<decimal>(type: "DECIMAL(10,2)", nullable: false),
                     RegistrationDate = table.Column<DateTime>(nullable: false),
                     Image = table.Column<string>(type: "varchar(250)", nullable: false),
                     StockQuantity = table.Column<int>(nullable: false),
@@ -39,18 +39,18 @@ namespace NerdStore.Catalog.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_product", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_product_category_CategoryId",
+                        name: "FK_Product_Category_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "category",
+                        principalTable: "Category",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_product_CategoryId",
-                table: "product",
+                name: "IX_Product_CategoryId",
+                table: "Product",
                 column: "CategoryId");
         }
 

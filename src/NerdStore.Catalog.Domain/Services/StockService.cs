@@ -3,6 +3,7 @@ using NerdStore.Catalog.Domain.Events;
 using NerdStore.Catalog.Domain.Interfaces;
 using NerdStore.Core.Communication.Mediatr;
 using NerdStore.Core.DomainObjects.DTO;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 using System;
 using System.Threading.Tasks;
 
@@ -11,13 +12,13 @@ namespace NerdStore.Catalog.Domain.Services
     public class StockService : IStockService
     {
         private readonly IProductRepository _productRepository;
-        private readonly IMediatrHandler _bus;
+        private readonly IMediatrHandler _mediatrHandler;
 
         public StockService(IProductRepository productRepository,
-                            IMediatrHandler bus)
+                            IMediatrHandler mediatrHandler)
         {
             _productRepository = productRepository;
-            _bus = bus;
+            _mediatrHandler = mediatrHandler;
         }
 
         public async Task<bool> DebitStock(OrderProductsDto orderProductsDto)
@@ -28,7 +29,7 @@ namespace NerdStore.Catalog.Domain.Services
                     return false;
             }
 
-            return await _productRepository.UnitOfWork.Commit();
+            return true;
         }
 
         public async Task<bool> DebitStock(Guid productId, int quantity)
@@ -36,15 +37,18 @@ namespace NerdStore.Catalog.Domain.Services
             var product = await _productRepository.GetById(productId);
 
             if (product == null) return false;
-     
-            if (!product.HasStock(quantity)) return false;
 
+            if (!product.HasStock(quantity))
+            {
+                await _mediatrHandler.PublishNotification(new DomainNotification("Stock", $"The product {product.Name} is out of stock."));
+                return false;
+            }
             product.DebitStock(quantity);
 
             // TODO: To parameterize the low stock quantity 
             if (product.StockQuantity < 10)
             {
-                await _bus.PublishEvent(new LowProductStockEvent(product.Id, product.StockQuantity));
+                await _mediatrHandler.PublishEvent(new LowProductStockEvent(product.Id, product.StockQuantity));
             }
 
             _productRepository.Update(product);
@@ -59,7 +63,7 @@ namespace NerdStore.Catalog.Domain.Services
                     return false;
             }
 
-            return await _productRepository.UnitOfWork.Commit();
+            return true;
         }
 
         public async Task<bool> SupplyStock(Guid productId, int quantity)

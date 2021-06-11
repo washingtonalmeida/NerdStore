@@ -10,7 +10,8 @@ namespace NerdStore.Catalog.Domain.Events
 {
     public class ProductEventHandler : 
         INotificationHandler<LowProductStockEvent>,
-        INotificationHandler<OrderStartedEvent>
+        INotificationHandler<OrderStartedEvent>,
+        INotificationHandler<OrderProcessingCanceledEvent>
     {
         private readonly IProductRepository _productRepository;
         private readonly IStockService _stockService;
@@ -44,6 +45,11 @@ namespace NerdStore.Catalog.Domain.Events
             {
                 await _mediatrHandler.PublishEvent(new InsufficientStockForOrderEvent(message.CustomerId, message.OrderId));
             }
+        }
+
+        public async Task Handle(OrderProcessingCanceledEvent message, CancellationToken cancellationToken)
+        {
+            await _stockService.SupplyStock(message.OrderProducts);
         }
     }
 }

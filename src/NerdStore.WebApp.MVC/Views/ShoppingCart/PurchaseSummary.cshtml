@@ -51,7 +51,10 @@
 
                 </div>
                 <div class="col-md-8 order-md-1">
-                    <form method="post" asp-controller="Carrinho" asp-action="IniciarPedido">
+                    <form method="post" asp-controller="ShoppingCart" asp-action="StartOrder">
+
+                        <input type="hidden" id="OrderId" name="OrderId" value="@Model.OrderId" />
+                        <input type="hidden" id="TotalPrice" name="TotalPrice" value="@Model.TotalPrice" />
 
                         <h4 class="mb-3">Pagamento</h4>
                         <hr class="mb-4">

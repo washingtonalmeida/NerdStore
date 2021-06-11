@@ -22,7 +22,6 @@ namespace NerdStore.Sales.Data.Migrations
                     Quantity = table.Column<int>(nullable: false),
                     VoucherDiscountType = table.Column<int>(nullable: false),
                     RegistrationDate = table.Column<DateTime>(nullable: false),
-                    DateOfUse = table.Column<DateTime>(nullable: true),
                     ExpirationDate = table.Column<DateTime>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     Used = table.Column<bool>(nullable: false)
